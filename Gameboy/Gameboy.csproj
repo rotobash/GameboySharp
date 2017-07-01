@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{44943D09-1F2F-4486-A034-A2B8BEE50C3C}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Gameboy</RootNamespace>
+    <AssemblyName>Gameboy</AssemblyName>
+    <StartupObject>Gameboy.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Memory.cs" />
+    <Compile Include="CPU.cs" />
+    <Compile Include="Opcodes\ZeroInstructions.cs" />
+    <Compile Include="Opcodes\OneInstructions.cs" />
+    <Compile Include="Opcodes\TwoInstructions.cs" />
+    <Compile Include="Opcodes\ThreeInstructions.cs" />
+    <Compile Include="Opcodes\FourInstructions.cs" />
+    <Compile Include="Opcodes\FiveInstructions.cs" />
+    <Compile Include="Opcodes\SixInstructions.cs" />
+    <Compile Include="Opcodes\SevenInstructions.cs" />
+    <Compile Include="Opcodes\EightInstructions.cs" />
+    <Compile Include="Opcodes\Opcode.cs" />
+    <Compile Include="Opcodes\NineInstructions.cs" />
+    <Compile Include="Opcodes\AInstructions.cs" />
+    <Compile Include="Opcodes\BInstructions.cs" />
+    <Compile Include="Opcodes\CInstructions.cs" />
+    <Compile Include="Opcodes\DInstructions.cs" />
+    <Compile Include="Opcodes\EInstructions.cs" />
+    <Compile Include="Opcodes\FInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\AInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\BInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\CInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\DInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\EightInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\EInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\FInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\FiveInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\FourInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\NineInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\OneInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\SevenInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\SixInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\ThreeInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\TwoInstructions.cs" />
+    <Compile Include="Opcodes\ExtendedOpcodes\ZeroInstructions.cs" />
+    <Compile Include="Utility\Arithmetic.cs" />
+    <Compile Include="Utility\Rotates.cs" />
+    <Compile Include="Utility\BitOperations.cs" />
+    <Compile Include="Utility\Flow.cs" />
+    <Compile Include="Utility\Misc.cs" />
+    <Compile Include="Utility\Load.cs" />
+    <Compile Include="Cartidge.cs" />
+    <Compile Include="LCD.cs" />
+    <Compile Include="Joypad.cs" />
+    <Compile Include="Sound.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="MainLoop.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="lib64\libSDL2-2.0.so.0">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="lib64\libSDL2_image-2.0.so.0">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="lib64\libjpeg.so.62">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="lib64\libmojoshader.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="lib64\libogg.so.0">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="lib64\libopenal.so.1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="lib64\libpng15.so.15">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="lib64\libtheoradec.so.1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="lib64\libtheoraplay.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="lib64\libvorbis.so.0">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="lib64\libvorbisfile.so.3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\pixel.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Games\Tetris.gb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="boot.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Opcodes\" />
+    <Folder Include="Opcodes\ExtendedOpcodes\" />
+    <Folder Include="Utility\" />
+    <Folder Include="Content\" />
+    <Folder Include="Games\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\FNA\FNA\FNA.csproj">
+      <Project>{35253CE1-C864-4CD3-8249-4D1319748E8F}</Project>
+      <Name>FNA</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>
