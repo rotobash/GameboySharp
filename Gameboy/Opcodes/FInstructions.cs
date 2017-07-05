@@ -11,17 +11,17 @@ namespace Gameboy.Opcodes
         public override int ZeroSuffix() 
         {
             byte offset = cpu.FetchNextInstruction();
-            Load.LOADBYTEFROMADDRESS(cpu, cpu.AF, (ushort)(0xFF00 + offset), true);
+            Load.LOADBYTEFROMADDRESS(cpu, ref cpu.AF, (ushort)(0xFF00 + offset), true);
             return 12;
         }
         public override int OneSuffix() 
         {
-            Load.POPSTACKINTOREG(cpu, cpu.AF);
+            Load.POPSTACKINTOREG(cpu, ref cpu.AF);
             return 12;
         }
         public override int TwoSuffix() 
         {
-            Load.LOADREGTOADDRESS(cpu, cpu.AF, cpu.BC.low, true);
+            Load.LOADREGTOADDRESS(cpu, ref cpu.AF, cpu.BC.low, true);
             return 8;
         }
         public override int ThreeSuffix() 
@@ -35,7 +35,7 @@ namespace Gameboy.Opcodes
         }
         public override int FiveSuffix() 
         {
-            Load.PUSHREGONTOSTACK(cpu, cpu.AF);
+            Load.PUSHREGONTOSTACK(cpu, ref cpu.AF);
             return 16;
         }
         public override int SixSuffix() 
@@ -46,7 +46,7 @@ namespace Gameboy.Opcodes
         public override int SevenSuffix() 
         {
             Flow.RESTART(cpu, 0x30);
-            return 32;
+            return 16;
         }
         public override int EightSuffix() 
         {
@@ -56,7 +56,7 @@ namespace Gameboy.Opcodes
         }
         public override int NineSuffix() 
         {
-            Load.LOADWORDREGTOREG(cpu, cpu.SP, cpu.HL);
+            Load.LOADWORDREGTOREG(cpu, ref cpu.SP, ref cpu.HL);
             return 8;
         }
         public override int ASuffix() 
@@ -64,7 +64,7 @@ namespace Gameboy.Opcodes
             ushort address = (ushort)(cpu.FetchNextInstruction() << 8);
             address += cpu.FetchNextInstruction();
 
-            Load.LOADBYTEFROMADDRESS(cpu, cpu.AF, address, true);
+            Load.LOADBYTEFROMADDRESS(cpu, ref cpu.AF, address, true);
             return 16;
         }
         public override int BSuffix() 
@@ -89,7 +89,7 @@ namespace Gameboy.Opcodes
         {
             Flow.RESTART(cpu, 0x38);
             // gameboy pdf says it's 32, website says 16
-            return 32;
+            return 16;
         }
     }
 }

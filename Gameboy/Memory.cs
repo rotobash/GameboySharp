@@ -72,7 +72,7 @@ namespace Gameboy
         public void WriteToMemory(ushort address, byte data) 
         {
             if (address < 0x8000)
-            { 
+            {
                 rom.HandleBanking(address, data);
             }
             else if ((address >= 0xA000) && (address < 0xC000))
@@ -80,19 +80,25 @@ namespace Gameboy
                 ushort newAddress = (ushort)(address - 0xA000);
                 rom.WriteToRam(newAddress, data);
             }
-            else if ((address >= 0xE000) && (address < 0xFE00))
-            { 
+            else if ((address >= 0xC000) && (address < 0xE000))
+            {
                 // writing to ECHO ram also writes in RAM 
                 internalMemory[address] = data;
-                WriteToMemory((ushort)(address - 0x2000), data); 
+            }
+            else if ((address >= 0xE000) && (address < 0xFE00))
+            {
+                // writing to ECHO ram also writes in RAM 
+                internalMemory[address] = data;
+                WriteToMemory((ushort)(address - 0x2000), data);
             }
             else if ((address >= 0xFEA0) && (address < 0xFEFF))
-            { 
+            {
                 // this area is restricted
             }
             else if (address == 0xFF04)
             {
                 internalMemory[0xFF04] = 0;
+                DividerCounter = 0;
             }
             else if (address == TMC)
             {
@@ -100,7 +106,10 @@ namespace Gameboy
                 internalMemory[TMC] = data;
                 byte newFreq = GetClockFrequency();
                 if (currentFreq != newFreq)
+                {
+                    TimerCounter = 0;
                     SetClockFrequency();
+                } 
             }
             else if (address == 0xFF44)
             {

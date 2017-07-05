@@ -10,32 +10,32 @@ namespace Gameboy.Opcodes.ExtendedOpcodes
         }
         public override int ZeroSuffix() 
         {
-            BitOperations.RESETBIT(cpu, 2, cpu.BC, true);
+            BitOperations.RESETBIT(cpu, 2, ref cpu.BC, true);
             return 4;
         }
         public override int OneSuffix() 
         {
-            BitOperations.RESETBIT(cpu, 2, cpu.BC, false);
+            BitOperations.RESETBIT(cpu, 2, ref cpu.BC, false);
             return 4;
         }
         public override int TwoSuffix() 
         {
-            BitOperations.RESETBIT(cpu, 2, cpu.DE, true);
+            BitOperations.RESETBIT(cpu, 2, ref cpu.DE, true);
             return 4;
         }
         public override int ThreeSuffix() 
         {
-            BitOperations.RESETBIT(cpu, 2, cpu.DE, false);
+            BitOperations.RESETBIT(cpu, 2, ref cpu.DE, false);
             return 4;
         }
         public override int FourSuffix() 
         {
-            BitOperations.RESETBIT(cpu, 2, cpu.HL, true);
+            BitOperations.RESETBIT(cpu, 2, ref cpu.HL, true);
             return 4;
         }
         public override int FiveSuffix() 
         {
-            BitOperations.RESETBIT(cpu, 2, cpu.HL, false);
+            BitOperations.RESETBIT(cpu, 2, ref cpu.HL, false);
             return 4;
         }
         public override int SixSuffix() 
@@ -45,37 +45,37 @@ namespace Gameboy.Opcodes.ExtendedOpcodes
         }
         public override int SevenSuffix() 
         {
-            BitOperations.RESETBIT(cpu, 2, cpu.AF, true);
+            BitOperations.RESETBIT(cpu, 2, ref cpu.AF, true);
             return 4;
         }
         public override int EightSuffix() 
         {
-            BitOperations.RESETBIT(cpu, 3, cpu.BC, true);
+            BitOperations.RESETBIT(cpu, 3, ref cpu.BC, true);
             return 4;
         }
         public override int NineSuffix() 
         {
-            BitOperations.RESETBIT(cpu, 3, cpu.BC, false);
+            BitOperations.RESETBIT(cpu, 3, ref cpu.BC, false);
             return 4;
         }
         public override int ASuffix() 
         {
-            BitOperations.RESETBIT(cpu, 3, cpu.DE, true);
+            BitOperations.RESETBIT(cpu, 3, ref cpu.DE, true);
             return 4;
         }
         public override int BSuffix() 
         {
-            BitOperations.RESETBIT(cpu, 3, cpu.DE, false);
+            BitOperations.RESETBIT(cpu, 3, ref cpu.DE, false);
             return 4;
         }
         public override int CSuffix() 
         {
-            BitOperations.RESETBIT(cpu, 3, cpu.HL, true);
+            BitOperations.RESETBIT(cpu, 3, ref cpu.HL, true);
             return 4;
         }
         public override int DSuffix() 
         {
-            BitOperations.RESETBIT(cpu, 3, cpu.HL, false);
+            BitOperations.RESETBIT(cpu, 3, ref cpu.HL, false);
             return 4;
         }
         public override int ESuffix() 
@@ -85,7 +85,7 @@ namespace Gameboy.Opcodes.ExtendedOpcodes
         }
         public override int FSuffix() 
         {
-            BitOperations.RESETBIT(cpu, 3, cpu.AF, true);
+            BitOperations.RESETBIT(cpu, 3, ref cpu.AF, true);
             return 4;
         }
     }

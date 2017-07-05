@@ -11,32 +11,32 @@ namespace Gameboy.Opcodes.ExtendedOpcodes
 
         public override int ZeroSuffix() 
         {
-            Rotates.ROTATELEFT(cpu, cpu.BC, true);
+            Rotates.ROTATELEFT(cpu, ref cpu.BC, true);
             return 4;
         }
         public override int OneSuffix() 
         {
-            Rotates.ROTATELEFT(cpu, cpu.BC, false);
+            Rotates.ROTATELEFT(cpu, ref cpu.BC, false);
             return 4;
         }
         public override int TwoSuffix() 
         {
-            Rotates.ROTATELEFT(cpu, cpu.DE, true);
+            Rotates.ROTATELEFT(cpu, ref cpu.DE, true);
             return 4;
         }
         public override int ThreeSuffix() 
         {
-            Rotates.ROTATELEFT(cpu, cpu.DE, false);
+            Rotates.ROTATELEFT(cpu, ref cpu.DE, false);
             return 4;
         }
         public override int FourSuffix() 
         {
-            Rotates.ROTATELEFT(cpu, cpu.HL, true);
+            Rotates.ROTATELEFT(cpu, ref cpu.HL, true);
             return 4;
         }
         public override int FiveSuffix() 
         {
-            Rotates.ROTATELEFT(cpu, cpu.HL, false);
+            Rotates.ROTATELEFT(cpu, ref cpu.HL, false);
             return 4;
         }
         public override int SixSuffix() 
@@ -46,37 +46,37 @@ namespace Gameboy.Opcodes.ExtendedOpcodes
         }
         public override int SevenSuffix() 
         {
-            Rotates.ROTATELEFT(cpu, cpu.AF, true);
+            Rotates.ROTATELEFT(cpu, ref cpu.AF, true);
             return 4;
         }
         public override int EightSuffix() 
         {
-            Rotates.ROTATERIGHT(cpu, cpu.BC, true);
+            Rotates.ROTATERIGHT(cpu, ref cpu.BC, true);
             return 4;
         }
         public override int NineSuffix() 
         {
-            Rotates.ROTATERIGHT(cpu, cpu.BC, false);
+            Rotates.ROTATERIGHT(cpu, ref cpu.BC, false);
             return 4;
         }
         public override int ASuffix() 
         {
-            Rotates.ROTATERIGHT(cpu, cpu.DE, true);
+            Rotates.ROTATERIGHT(cpu, ref cpu.DE, true);
             return 4;
         }
         public override int BSuffix() 
         {
-            Rotates.ROTATERIGHT(cpu, cpu.DE, false);
+            Rotates.ROTATERIGHT(cpu, ref cpu.DE, false);
             return 4;
         }
         public override int CSuffix() 
         {
-            Rotates.ROTATERIGHT(cpu, cpu.HL, true);
+            Rotates.ROTATERIGHT(cpu, ref cpu.HL, true);
             return 4;
         }
         public override int DSuffix() 
         {
-            Rotates.ROTATERIGHT(cpu, cpu.HL, false);
+            Rotates.ROTATERIGHT(cpu, ref cpu.HL, false);
             return 4;
         }
         public override int ESuffix() 
@@ -86,7 +86,7 @@ namespace Gameboy.Opcodes.ExtendedOpcodes
         }
         public override int FSuffix() 
         {
-            Rotates.ROTATERIGHT(cpu, cpu.AF, true);
+            Rotates.ROTATERIGHT(cpu, ref cpu.AF, true);
             return 4;
         }
     }

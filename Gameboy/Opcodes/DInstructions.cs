@@ -15,14 +15,15 @@ namespace Gameboy.Opcodes
         /// Return to last address if Carry flag is set.
         /// </summary>
         /// <returns>8 cycles</returns>
-        public override int ZeroSuffix() 
+        public override int ZeroSuffix()
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALRETURN(cpu, Condition.CFLAGRESET);
-            return 8;
+            return (temp == cpu.PC.word) ? 8 : 20;
         }
         public override int OneSuffix() 
         {
-            Load.POPSTACKINTOREG(cpu, cpu.DE);
+            Load.POPSTACKINTOREG(cpu, ref cpu.DE);
             return 12;
         }
 
@@ -30,10 +31,11 @@ namespace Gameboy.Opcodes
         /// Instruction: JUMP NC,nn (0xD2)
         /// Jump to immediate address if Carry flag is reset
         /// </summary>
-        public override int TwoSuffix() 
+        public override int TwoSuffix()
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALJUMP(cpu, Condition.CFLAGRESET);
-            return 12;
+            return (temp == cpu.PC.word) ? 12 : 16;
         }
 
         //Not used
@@ -46,14 +48,15 @@ namespace Gameboy.Opcodes
         /// Instruction: Call NC,nn (0xD4)
         /// Call immediate address if Carry flag is reset
         /// </summary>
-        public override int FourSuffix() 
+        public override int FourSuffix()
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALCALL(cpu, Condition.CFLAGRESET);
-            return 12;
+            return (temp == cpu.PC.word) ? 12 : 24;
         }
         public override int FiveSuffix() 
         {
-            Load.PUSHREGONTOSTACK(cpu, cpu.DE);
+            Load.PUSHREGONTOSTACK(cpu, ref cpu.DE);
             return 16;
         }
         public override int SixSuffix() 
@@ -64,7 +67,7 @@ namespace Gameboy.Opcodes
         public override int SevenSuffix() 
         {
             Flow.RESTART(cpu, 0x10);
-            return 32;
+            return 16;
         }
 
         /// <summary>
@@ -72,10 +75,11 @@ namespace Gameboy.Opcodes
         /// Return to last address if Carry flag is set.
         /// </summary>
         /// <returns>8 cycles</returns>
-        public override int EightSuffix() 
+        public override int EightSuffix()
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALRETURN(cpu, Condition.CFLAGSET);
-            return 8;
+            return (temp == cpu.PC.word) ? 8 : 20;
         }
         public override int NineSuffix() 
         {
@@ -89,10 +93,11 @@ namespace Gameboy.Opcodes
         /// Instruction: JUMP C,nn (0xDA)
         /// Jump to immediate address if Carry flag is set
         /// </summary>
-        public override int ASuffix() 
+        public override int ASuffix()
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALJUMP(cpu, Condition.CFLAGSET);
-            return 12;
+            return (temp == cpu.PC.word) ? 12 : 16;
         }
 
         //not used
@@ -105,10 +110,11 @@ namespace Gameboy.Opcodes
         /// Instruction: Call C,nn (0xDC)
         /// Call immediate address if Carry flag is set
         /// </summary>
-        public override int CSuffix() 
+        public override int CSuffix()
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALCALL(cpu, Condition.CFLAGSET);
-            return 12;
+            return (temp == cpu.PC.word) ? 12 : 24;
         }
 
         //not used
@@ -125,7 +131,7 @@ namespace Gameboy.Opcodes
         public override int FSuffix() 
         {
             Flow.RESTART(cpu, 0x18);
-            return 32;
+            return 16;
         }
     }
 }

@@ -122,14 +122,13 @@ namespace Gameboy
             graphics.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
 
-            Color[] buf = cpu.GFXBuffer;
+            Color[,] buf = cpu.GFXBuffer;
             
-            for (int y = 0; y < 144; y++)
+            for (int y = 0; y < 160; y++)
             {
-                for (int x = 0; x < 160; x++)
+                for (int x = 0; x < 144; x++)
                 {
-                    int position = x + (160 * y);
-                    spriteBatch.Draw(pixel, new Vector2(x * 8, y * 8), buf[position]);
+                    spriteBatch.Draw(pixel, new Vector2(x * 8, y * 8), buf[x, y]);
                 }
             }
             spriteBatch.End();

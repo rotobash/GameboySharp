@@ -26,7 +26,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int OneSuffix() 
         {
-            Load.LOADWORDTOREG(cpu, cpu.DE);
+            Load.LOADWORDTOREG(cpu, ref cpu.DE);
             return 12;
         }
 
@@ -36,7 +36,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int TwoSuffix() 
         {
-            Load.LOADBYTEFROMADDRESS(cpu, cpu.AF, cpu.DE.word, true);
+            Load.LOADBYTEFROMADDRESS(cpu, ref cpu.AF, cpu.DE.word, true);
             return 8;
         }
 
@@ -46,7 +46,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int ThreeSuffix() 
         {
-            Arithmetic.INC16BIT(cpu.DE);
+            Arithmetic.INC16BIT(ref cpu.DE);
             return 8;
         }
 
@@ -56,7 +56,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int FourSuffix() 
         {
-            Arithmetic.INC8BIT(cpu, cpu.DE, true);
+            Arithmetic.INC8BIT(cpu, ref cpu.DE, true);
             return 4;
         }
 
@@ -66,7 +66,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int FiveSuffix() 
         {
-            Arithmetic.DEC8BIT(cpu, cpu.DE, true);
+            Arithmetic.DEC8BIT(cpu, ref cpu.DE, true);
             return 4;
         }
 
@@ -76,7 +76,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int SixSuffix() 
         {
-            Load.LOADBYTETOREG(cpu, cpu.DE, true);
+            Load.LOADBYTETOREG(cpu, ref cpu.DE, true);
             return 8;
         }
 
@@ -86,7 +86,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int SevenSuffix() 
         {
-            Rotates.ROTATELEFTTHROUGHCARRY(cpu, cpu.AF, true);
+            Rotates.ROTATELEFTTHROUGHCARRY(cpu, ref cpu.AF, true);
             return 4;
         }
 
@@ -98,7 +98,7 @@ namespace Gameboy.Opcodes
         public override int EightSuffix() 
         {
             Flow.JUMPN(cpu);
-            return 8;
+            return 12;
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int NineSuffix() 
         {
-            Arithmetic.ADDREGISTERTOHL(cpu, cpu.DE);
+            Arithmetic.ADDREGISTERTOHL(cpu, ref cpu.DE);
             return 8;
         }
 
@@ -117,7 +117,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int ASuffix() 
         {
-            Load.LOADBYTEFROMADDRESS(cpu, cpu.AF, cpu.DE.word, true);
+            Load.LOADBYTEFROMADDRESS(cpu, ref cpu.AF, cpu.DE.word, true);
             return 8;
         }
 
@@ -127,7 +127,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int BSuffix() 
         {
-            Arithmetic.DEC16BIT(cpu, cpu.DE);
+            Arithmetic.DEC16BIT(cpu, ref cpu.DE);
             return 8;
         }
 
@@ -137,7 +137,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int CSuffix() 
         {
-            Arithmetic.INC8BIT(cpu, cpu.DE, false);
+            Arithmetic.INC8BIT(cpu, ref cpu.DE, false);
             return 4;
         }
 
@@ -156,7 +156,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int ESuffix() 
         {
-            Load.LOADBYTETOREG(cpu, cpu.DE, false);
+            Load.LOADBYTETOREG(cpu, ref cpu.DE, false);
             return 8;
         }
 
@@ -166,7 +166,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int FSuffix() 
         {
-            Rotates.ROTATERIGHTTHROUGHCARRY(cpu, cpu.AF, true);
+            Rotates.ROTATERIGHTTHROUGHCARRY(cpu, ref cpu.AF, true);
             return 4;
         }
     }

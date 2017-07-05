@@ -8,12 +8,16 @@ namespace Gameboy.Utility
         {
             if (result == 0)
                 cpu.SetFlag(Flags.Zero);
+            else
+                cpu.ResetFlag(Flags.Zero);
         }
 
         public static void SetZeroFlag(CPU cpu, byte result)
         {
             if (result == 0)
                 cpu.SetFlag(Flags.Zero);
+            else
+                cpu.ResetFlag(Flags.Zero);
         }
 
         public static byte RESETMSB(byte input) 

@@ -12,17 +12,18 @@ namespace Gameboy.Opcodes
 
         public override int ZeroSuffix() 
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALJUMPN(cpu, Condition.ZFLAGRESET);
-            return 12;
+            return (temp == cpu.PC.word) ? 8 : 12;
         }
         public override int OneSuffix() 
         {
-            Load.LOADWORDTOREG(cpu, cpu.HL);
+            Load.LOADWORDTOREG(cpu, ref cpu.HL);
             return 12;
         }
         public override int TwoSuffix() 
         {
-            Load.LOADREGTOADDRESS(cpu, cpu.AF, cpu.HL.word++, true);
+            Load.LOADREGTOADDRESS(cpu, ref cpu.AF, cpu.HL.word++, true);
             return 8;
         }
 
@@ -32,7 +33,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int ThreeSuffix() 
         {
-            Arithmetic.INC16BIT(cpu.HL);
+            Arithmetic.INC16BIT(ref cpu.HL);
             return 8;
         }
 
@@ -42,7 +43,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int FourSuffix() 
         {
-            Arithmetic.INC8BIT(cpu, cpu.HL, true);
+            Arithmetic.INC8BIT(cpu, ref cpu.HL, true);
             return 4;
         }
 
@@ -52,7 +53,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int FiveSuffix() 
         {
-            Arithmetic.DEC8BIT(cpu, cpu.HL, true);
+            Arithmetic.DEC8BIT(cpu, ref cpu.HL, true);
             return 4;
         }
 
@@ -62,7 +63,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int SixSuffix() 
         {
-            Load.LOADBYTETOREG(cpu, cpu.HL, true);
+            Load.LOADBYTETOREG(cpu, ref cpu.HL, true);
             return 8;
         }
         public override int SevenSuffix() 
@@ -76,10 +77,11 @@ namespace Gameboy.Opcodes
         /// If Zero flag is set, jump to PC + n
         /// </summary>
         /// <returns>8 cycles</returns>
-        public override int EightSuffix() 
+        public override int EightSuffix()
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALJUMPN(cpu, Condition.ZFLAGSET);
-            return 8;
+            return (temp == cpu.PC.word) ? 8 : 12;
         }
 
         /// <summary>
@@ -88,7 +90,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int NineSuffix() 
         {
-            Arithmetic.ADDREGISTERTOHL(cpu, cpu.HL);
+            Arithmetic.ADDREGISTERTOHL(cpu, ref cpu.HL);
             return 8;
         }
 
@@ -98,7 +100,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int ASuffix() 
         {
-            Load.LOADBYTEFROMADDRESS(cpu, cpu.AF, cpu.HL.word++, true);
+            Load.LOADBYTEFROMADDRESS(cpu, ref cpu.AF, cpu.HL.word++, true);
             return 8;
         }
 
@@ -108,7 +110,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int BSuffix() 
         {
-            Arithmetic.DEC16BIT(cpu, cpu.HL);
+            Arithmetic.DEC16BIT(cpu, ref cpu.HL);
             return 8;
         }
 
@@ -118,7 +120,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int CSuffix() 
         {
-            Arithmetic.INC8BIT(cpu, cpu.HL, false);
+            Arithmetic.INC8BIT(cpu, ref cpu.HL, false);
             return 4;
         }
 
@@ -128,7 +130,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int DSuffix() 
         {
-            Arithmetic.DEC8BIT(cpu, cpu.HL, false);
+            Arithmetic.DEC8BIT(cpu, ref cpu.HL, false);
             return 4;
         }
 
@@ -138,7 +140,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int ESuffix() 
         {
-            Load.LOADBYTETOREG(cpu, cpu.HL, false);
+            Load.LOADBYTETOREG(cpu, ref cpu.HL, false);
             return 8;
         }
 

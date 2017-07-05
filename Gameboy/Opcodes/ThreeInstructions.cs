@@ -10,24 +10,25 @@ namespace Gameboy.Opcodes
         {
         }
 
-        public override int ZeroSuffix() 
+        public override int ZeroSuffix()
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALJUMPN(cpu, Condition.CFLAGRESET);
-            return 12;
+            return (temp == cpu.PC.word) ? 8 : 12;
         }
         public override int OneSuffix() 
         {
-            Load.LOADWORDTOREG(cpu, cpu.SP);
+            Load.LOADWORDTOREG(cpu, ref cpu.SP);
             return 12;
         }
         public override int TwoSuffix() 
         {
-            Load.LOADREGTOADDRESS(cpu, cpu.AF, cpu.HL.word--, true);
+            Load.LOADREGTOADDRESS(cpu, ref cpu.AF, cpu.HL.word--, true);
             return 8;
         }
         public override int ThreeSuffix() 
         {
-            Arithmetic.INC16BIT(cpu.SP);
+            Arithmetic.INC16BIT(ref cpu.SP);
             return 8;
         }
         public override int FourSuffix() 
@@ -44,7 +45,7 @@ namespace Gameboy.Opcodes
         {
             Register temp = new Register();
             temp.high = cpu.FetchNextInstruction();
-            Load.LOADREGTOADDRESS(cpu, temp, cpu.HL.word, true);
+            Load.LOADREGTOADDRESS(cpu, ref temp, cpu.HL.word, true);
             return 12;
         }
 
@@ -60,39 +61,40 @@ namespace Gameboy.Opcodes
             cpu.ResetFlag(Flags.Subtract);
             return 4;
         }
-        public override int EightSuffix() 
+        public override int EightSuffix()
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALJUMPN(cpu, Condition.CFLAGSET);
-            return 12;
+            return (temp == cpu.PC.word) ? 8 : 12;
         }
         public override int NineSuffix() 
         {
-            Arithmetic.ADDREGISTERTOHL(cpu, cpu.SP);
+            Arithmetic.ADDREGISTERTOHL(cpu, ref cpu.SP);
             return 8;
         }
         public override int ASuffix() 
         {
-            Load.LOADBYTEFROMADDRESS(cpu, cpu.AF, cpu.HL.word--, true);
+            Load.LOADBYTEFROMADDRESS(cpu, ref cpu.AF, cpu.HL.word--, true);
             return 8;
         }
         public override int BSuffix() 
         {
-            Arithmetic.DEC16BIT(cpu, cpu.SP);
+            Arithmetic.DEC16BIT(cpu, ref cpu.SP);
             return 8;
         }
         public override int CSuffix() 
         {
-            Arithmetic.INC8BIT(cpu, cpu.AF, true);
+            Arithmetic.INC8BIT(cpu, ref cpu.AF, true);
             return 4;
         }
         public override int DSuffix() 
         {
-            Arithmetic.DEC8BIT(cpu, cpu.AF, true);
+            Arithmetic.DEC8BIT(cpu, ref cpu.AF, true);
             return 4;
         }
         public override int ESuffix() 
         {
-            Load.LOADBYTETOREG(cpu, cpu.AF, true);
+            Load.LOADBYTETOREG(cpu, ref cpu.AF, true);
             return 8;
         }
 

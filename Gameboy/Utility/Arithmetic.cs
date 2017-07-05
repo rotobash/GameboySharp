@@ -6,7 +6,7 @@ namespace Gameboy.Utility
     public static class Arithmetic
     {
         #region Adding
-        public static void ADD8BIT(CPU cpu, Register reg, bool highRegister) 
+        public static void ADD8BIT(CPU cpu, ref Register reg, bool highRegister) 
         {
             byte regValue = (highRegister) ? reg.high : reg.low;
             SETADDFLAGS8BIT(cpu, cpu.AF.high, regValue);
@@ -27,7 +27,7 @@ namespace Gameboy.Utility
             cpu.AF.high = (byte)(cpu.AF.high + value);
         }
 
-        public static void ADC8BIT(CPU cpu, Register reg, bool highRegister) 
+        public static void ADC8BIT(CPU cpu, ref Register reg, bool highRegister) 
         {
             byte regValue = (highRegister) ? reg.high : reg.low;
 
@@ -60,7 +60,7 @@ namespace Gameboy.Utility
             cpu.AF.high = (byte)(cpu.AF.high + value);
         }
 
-        public static void ADDREGISTERTOHL(CPU cpu, Register reg) 
+        public static void ADDREGISTERTOHL(CPU cpu, ref Register reg) 
         {
             cpu.ResetFlag(Flags.Subtract);
             SETCARRYFLAGS16BIT(cpu, cpu.HL.word, reg.word);
@@ -76,7 +76,7 @@ namespace Gameboy.Utility
             cpu.SP.word = (ushort)(cpu.SP.word + data);
         }
 
-        public static void INC8BIT(CPU cpu, Register reg, bool highRegister) 
+        public static void INC8BIT(CPU cpu, ref Register reg, bool highRegister) 
         {
             byte regValue = (highRegister) ? reg.high : reg.low;
 
@@ -104,7 +104,7 @@ namespace Gameboy.Utility
             cpu.WriteToMemory(address, value);
         }
 
-        public static void INC16BIT(Register reg) 
+        public static void INC16BIT(ref Register reg) 
         {
             //cast to prevent overflow
             reg.word = (ushort)(reg.word + 1);
@@ -112,7 +112,7 @@ namespace Gameboy.Utility
         #endregion
 
         #region SUBRACTING
-        public static void SUB8BIT(CPU cpu, Register reg, bool highRegister) 
+        public static void SUB8BIT(CPU cpu, ref Register reg, bool highRegister) 
         {
             byte regValue = (highRegister) ? reg.high : reg.low;
             SETSUBFLAGS8BIT(cpu, cpu.AF.high, regValue);
@@ -133,7 +133,7 @@ namespace Gameboy.Utility
             cpu.AF.high = (byte)(cpu.AF.high - value);
         }
 
-        public static void SBC8BIT(CPU cpu, Register reg, bool highRegister)  
+        public static void SBC8BIT(CPU cpu, ref Register reg, bool highRegister)  
         {
             byte regValue = (highRegister) ? reg.high : reg.low;
 
@@ -166,18 +166,18 @@ namespace Gameboy.Utility
             cpu.AF.high = (byte)(cpu.AF.high - value);
         }
 
-        public static void DEC8BIT(CPU cpu, Register reg, bool highRegister) 
+        public static void DEC8BIT(CPU cpu, ref Register reg, bool highRegister) 
         {
             byte regValue = (highRegister) ? reg.high : reg.low;
             regValue = (regValue == 0xFF) ?  (byte)0 : (byte)(regValue - 1);
             if (highRegister)
             {
-                SETDECFLAGS8BIT(cpu, reg.high, regValue);
+                SETDECFLAGS8BIT(cpu, reg.high);
                 reg.high = regValue;
             }
             else
             {
-                SETDECFLAGS8BIT(cpu, reg.low, regValue);
+                SETDECFLAGS8BIT(cpu, reg.low);
                 reg.low = regValue;
             }
         }
@@ -189,11 +189,11 @@ namespace Gameboy.Utility
 
             value = (value == 0) ?  (byte)0xFF : (byte)(value - 1);
 
-            SETDECFLAGS8BIT(cpu, (byte)(value + 1), value);
+            SETDECFLAGS8BIT(cpu, (byte)(value + 1));
             cpu.WriteToMemory(address, value);
         }
 
-        public static void DEC16BIT(CPU cpu, Register reg) 
+        public static void DEC16BIT(CPU cpu, ref Register reg) 
         {
             //cast to prevent underflow
             reg.word = (ushort)(reg.word - 1);
@@ -202,7 +202,7 @@ namespace Gameboy.Utility
         #endregion
 
         #region LOGICAL
-        public static void AND8BIT(CPU cpu, Register reg, bool highRegister) 
+        public static void AND8BIT(CPU cpu, ref Register reg, bool highRegister) 
         {
             byte regValue = (highRegister) ? reg.high : reg.low;
             cpu.AF.high &= regValue;
@@ -235,7 +235,7 @@ namespace Gameboy.Utility
             cpu.ResetFlag(Flags.Subtract);
         }
 
-        public static void OR8BIT(CPU cpu, Register reg, bool highRegister) 
+        public static void OR8BIT(CPU cpu, ref Register reg, bool highRegister) 
         {
             byte regValue = (highRegister) ? reg.high : reg.low;
             cpu.AF.high |= regValue;
@@ -268,7 +268,7 @@ namespace Gameboy.Utility
             cpu.ResetFlag(Flags.Subtract);
         }
 
-        public static void XOR8BIT(CPU cpu, Register reg, bool highRegister) 
+        public static void XOR8BIT(CPU cpu, ref Register reg, bool highRegister) 
         {
             byte regValue = (highRegister) ? reg.high : reg.low;
             cpu.AF.high ^= regValue;
@@ -301,7 +301,7 @@ namespace Gameboy.Utility
             cpu.ResetFlag(Flags.Subtract);
         }
 
-        public static void CP8BIT(CPU cpu, Register reg, bool highRegister) 
+        public static void CP8BIT(CPU cpu, ref Register reg, bool highRegister) 
         {
             byte regValue = (highRegister) ? reg.high : reg.low;
             SETSUBFLAGS8BIT(cpu, cpu.AF.high, regValue);
@@ -325,7 +325,7 @@ namespace Gameboy.Utility
         {
             short result = (short)(first - second);
 
-            Misc.SetZeroFlag(cpu, (ushort)result);
+            Misc.SetZeroFlag(cpu, (byte)result);
             cpu.SetFlag(Flags.Subtract);
 
             if (result < 0)
@@ -337,15 +337,15 @@ namespace Gameboy.Utility
                 cpu.SetFlag(Flags.HalfCarry);
         }
 
-        public static void SETDECFLAGS8BIT(CPU cpu, byte first, byte second)
+        public static void SETDECFLAGS8BIT(CPU cpu, byte first)
         {
-            short result = (short)(first - second);
+            short result = (short)(first - 1);
 
-            Misc.SetZeroFlag(cpu, (ushort)result);
+            Misc.SetZeroFlag(cpu, (byte)result);
             cpu.SetFlag(Flags.Subtract);
 
             short halfc = (short)(first & 0xF);
-            halfc -= (short)(second & 0xF);
+            halfc -= 0x1;
             if(halfc < 0)
                 cpu.SetFlag(Flags.HalfCarry);
         }

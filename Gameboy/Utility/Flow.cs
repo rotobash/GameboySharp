@@ -27,8 +27,10 @@ namespace Gameboy.Utility
 
         public static void JUMPN(CPU cpu) 
         {
-            sbyte data = (sbyte)cpu.FetchNextInstruction();
-            cpu.PC.word = (ushort)(cpu.PC.word + data);
+            int data = (sbyte)cpu.FetchNextInstruction();
+            ushort temp = (ushort)(cpu.PC.word + data);
+
+            cpu.PC.word = temp;
         }
 
         public static void CALL(CPU cpu)
@@ -59,9 +61,11 @@ namespace Gameboy.Utility
 
         public static void CONDITIONALJUMPN(CPU cpu, Condition condition) 
         {
-            sbyte data = (sbyte)cpu.FetchNextInstruction();
-            if(CheckCondition(cpu, condition))
-                cpu.PC.word = (ushort)(cpu.PC.word + data);
+            if (CheckCondition(cpu, condition))
+                JUMPN(cpu);
+            else
+                cpu.FetchNextInstruction();
+
         }
 
         static bool CheckCondition(CPU cpu, Condition condition)

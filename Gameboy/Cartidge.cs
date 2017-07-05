@@ -13,7 +13,7 @@ namespace Gameboy
         bool enableRam;
 
         public Cartidge(byte[] data)
-        { 
+        {
             //max cartridge size was 2MB, addressable through bank switching
             cartridgeMemory = new byte[0x200000];
 
@@ -48,10 +48,14 @@ namespace Gameboy
 
         internal void WriteToRam(ushort address, byte data)
         {
+
             if (enableRam)
             {
-                ramBanks[address + (currentRamBank * 0x2000)] = data;
+                if (MBController1Enabled)
+                    ramBanks[address] = data;
             }
+            else if (MBController2Enabled && (address < 0xA200))
+                ramBanks[address] = data;
         }
 
 
@@ -90,7 +94,7 @@ namespace Gameboy
                 if (MBController1Enabled || MBController2Enabled)
                     EnableRamBank(address, data);
             }
-            else if ((address >= 0x200) && (address < 0x4000))
+            else if ((address >= 0x2000) && (address < 0x4000))
             {
                 if (MBController1Enabled || MBController2Enabled)
                     EnableLowRomBank(address, data);
@@ -114,7 +118,7 @@ namespace Gameboy
 
         void EnableRamBank(ushort address, byte data) 
         {
-            if (MBController2Enabled)
+            if (MBController2Enabled && !CPU.TestBit(address, 8))
                 return;
 
             byte test = (byte)(data & 0xF);
@@ -133,7 +137,7 @@ namespace Gameboy
         { 
             byte newdata = (byte)(data & 0x1);
             romBanking = (newdata == 0) ? true : false;
-            if (romBanking)
+            if (!romBanking)
                 currentRamBank = 0;
         }
 
@@ -156,12 +160,16 @@ namespace Gameboy
         }
 
         void EnableHighRamBank(ushort address, byte data) 
-        {  
+        {
+            currentRamBank = 0;
+            data &= 3;
+            data <<= 5;
+
+            if ((currentRomBank & 0x31) == 0)
+                data++;
+
             currentRomBank &= 31;
-            data &= 224;
             currentRomBank |= data;
-            if (currentRomBank == 0)
-                currentRomBank++;
         }
 
 

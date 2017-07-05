@@ -10,7 +10,7 @@ namespace Gameboy.Utility
         /// <param name="cpu">Cpu.</param>
         /// <param name="register">Register.</param>
         /// <param name="highRegister">If set to <c>true</c> high register.</param>
-        public static void LOADBYTETOREG(CPU cpu, Register register, bool highRegister) 
+        public static void LOADBYTETOREG(CPU cpu, ref Register register, bool highRegister) 
         {
             if (highRegister)
                 register.high = cpu.FetchNextInstruction();
@@ -23,10 +23,10 @@ namespace Gameboy.Utility
         /// </summary>
         /// <param name="cpu">Cpu.</param>
         /// <param name="register">Register.</param>
-        public static void LOADWORDTOREG(CPU cpu, Register register) 
+        public static void LOADWORDTOREG(CPU cpu, ref Register register) 
         {
-            register.high = cpu.FetchNextInstruction();
             register.low = cpu.FetchNextInstruction();
+            register.high = cpu.FetchNextInstruction();
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Gameboy.Utility
         /// <param name="register">Register.</param>
         /// <param name="address">Address.</param>
         /// <param name="highRegister">If set to <c>true</c> high register.</param>
-        public static void LOADREGTOADDRESS(CPU cpu, Register register, ushort address, bool highRegister)
+        public static void LOADREGTOADDRESS(CPU cpu, ref Register register, ushort address, bool highRegister)
         {
             if (highRegister)
                 cpu.WriteToMemory(address, register.high);
@@ -52,7 +52,7 @@ namespace Gameboy.Utility
         /// <param name="highRegister1">If set to <c>true</c> high register.</param>
         /// <param name="register2">Register2.</param>
         /// <param name="highRegister2">If set to <c>true</c> high register.</param>
-        public static void LOADBYTEREGTOREG(CPU cpu, Register register1, bool highRegister1, Register register2, bool highRegister2) 
+        public static void LOADBYTEREGTOREG(CPU cpu, ref Register register1, bool highRegister1, ref Register register2, bool highRegister2) 
         {
             byte otherRegVal = highRegister2 ? register2.high : register2.low;
 
@@ -68,7 +68,7 @@ namespace Gameboy.Utility
         /// <param name="cpu">Cpu.</param>
         /// <param name="register1">Register1.</param>
         /// <param name="register2">Register2.</param>
-        public static void LOADWORDREGTOREG(CPU cpu, Register register1, Register register2) 
+        public static void LOADWORDREGTOREG(CPU cpu, ref Register register1, ref Register register2) 
         {
             register1.word = register2.word;
         }
@@ -80,7 +80,7 @@ namespace Gameboy.Utility
         /// <param name="register">Register.</param>
         /// <param name="address">Address.</param>
         /// <param name="highRegister">If set to <c>true</c> high register.</param>
-        public static void LOADBYTEFROMADDRESS(CPU cpu, Register register, ushort address, bool highRegister) 
+        public static void LOADBYTEFROMADDRESS(CPU cpu, ref Register register, ushort address, bool highRegister) 
         {
             if (highRegister)
                 register.high = cpu.FetchByteFromMemory(address);
@@ -94,7 +94,7 @@ namespace Gameboy.Utility
         /// <param name="cpu">Cpu.</param>
         /// <param name="register">Register.</param>
         /// <param name="address">Address.</param>
-        public static void LOADWORDTOADDRESS(CPU cpu, Register register, ushort address) 
+        public static void LOADWORDTOADDRESS(CPU cpu, ref Register register, ushort address) 
         {
             cpu.WriteToMemory(address, register.low);
             cpu.WriteToMemory((ushort)(address + 1), register.high);
@@ -111,12 +111,12 @@ namespace Gameboy.Utility
             register.word = cpu.FetchWordFromMemory(address);
         }
 
-        public static void PUSHREGONTOSTACK(CPU cpu, Register register)
+        public static void PUSHREGONTOSTACK(CPU cpu, ref Register register)
         {
             cpu.PushWord(register.word);
         }
 
-        public static void POPSTACKINTOREG(CPU cpu, Register register)
+        public static void POPSTACKINTOREG(CPU cpu, ref Register register)
         {
             register.word = cpu.PopWord();
         }

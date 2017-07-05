@@ -25,13 +25,14 @@ namespace Gameboy.Opcodes
         /// <returns>8 cycles</returns>
         public override int ZeroSuffix() 
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALRETURN(cpu, Condition.ZFLAGRESET);
-            return 8;
+            return (temp == cpu.PC.word) ? 8 : 20;
         }
 
         public override int OneSuffix() 
         {
-            Load.POPSTACKINTOREG(cpu, cpu.BC);
+            Load.POPSTACKINTOREG(cpu, ref cpu.BC);
             return 8;
         }
 
@@ -39,10 +40,11 @@ namespace Gameboy.Opcodes
         /// Instruction: JUMP NZ,nn (0xC2)
         /// Jump to immediate address if Zero flag is reset
         /// </summary>
-        public override int TwoSuffix() 
+        public override int TwoSuffix()
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALJUMP(cpu, Condition.ZFLAGRESET);
-            return 12;
+            return (temp == cpu.PC.word) ? 12 : 16;
         }
 
         /// <summary>
@@ -58,32 +60,33 @@ namespace Gameboy.Opcodes
             ushort address = (ushort)((high << 8) + low);
             Flow.JUMP(cpu, address);
 
-            return 12;
+            return 16;
         }
 
         /// <summary>
         /// Instruction: CALL NZ,nn (0xC4)
         /// Call immediate address if Zero flag is reset
         /// </summary>
-        public override int FourSuffix() 
+        public override int FourSuffix()
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALCALL(cpu, Condition.ZFLAGRESET);
-            return 12;
+            return (temp == cpu.PC.word) ? 12 : 24;
         }
         public override int FiveSuffix() 
         {
-            Load.PUSHREGONTOSTACK(cpu, cpu.BC);
-            return 0;
+            Load.PUSHREGONTOSTACK(cpu, ref cpu.BC);
+            return 16;
         }
         public override int SixSuffix() 
         {
             Arithmetic.ADD8BIT(cpu);
-            return 0;
+            return 8;
         }
         public override int SevenSuffix() 
         {
             Flow.RESTART(cpu, 0x0);
-            return 32;
+            return 16;
         }
 
         /// <summary>
@@ -91,25 +94,27 @@ namespace Gameboy.Opcodes
         /// Return to last address if Zero flag is set.
         /// </summary>
         /// <returns>8 cycles</returns>
-        public override int EightSuffix() 
+        public override int EightSuffix()
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALRETURN(cpu, Condition.ZFLAGSET);
-            return 8;
+            return (temp == cpu.PC.word) ? 8 : 20;
         }
         public override int NineSuffix() 
         {
             Flow.JUMP(cpu, cpu.PopWord());
-            return 8;
+            return 16;
         }
             
         /// <summary>
         /// Instruction: JUMP Z,nn (0xCA)
         /// Jump to immediate address if Zero flag is set
         /// </summary>
-        public override int ASuffix() 
+        public override int ASuffix()
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALJUMP(cpu, Condition.ZFLAGSET);
-            return 12;
+            return (temp == cpu.PC.word) ? 12 : 16;
         }
 
         /// <summary>
@@ -126,20 +131,21 @@ namespace Gameboy.Opcodes
         /// Instruction: CALL Z,nn (0xCC)
         /// Call immediate address if Zero flag is set
         /// </summary>
-        public override int CSuffix() 
+        public override int CSuffix()
         {
+            ushort temp = cpu.PC.word;
             Flow.CONDITIONALCALL(cpu, Condition.ZFLAGSET);
-            return 12;
+            return (temp == cpu.PC.word) ? 12 : 24;
         }
 
         /// <summary>
         /// Instruction: CALL nn (0xCD)
         /// Call immediate 2 byte value (LSB first)
         /// </summary>
-        public override int DSuffix() 
+        public override int DSuffix()
         {
             Flow.CALL(cpu);
-            return 12;
+            return 24;
         }
         public override int ESuffix() 
         {
@@ -149,7 +155,7 @@ namespace Gameboy.Opcodes
         public override int FSuffix() 
         {
             Flow.RESTART(cpu, 0x08);
-            return 32;
+            return 16;
         }
     }
 }

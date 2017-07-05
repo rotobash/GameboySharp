@@ -12,18 +12,18 @@ namespace Gameboy.Opcodes
         public override int ZeroSuffix() 
         {
             ushort address = (ushort)(0xFF00 + cpu.FetchNextInstruction());
-            Load.LOADREGTOADDRESS(cpu, cpu.AF, address, true);
+            Load.LOADREGTOADDRESS(cpu, ref cpu.AF, address, true);
             return 12;
         }
         public override int OneSuffix() 
         {
-            Load.POPSTACKINTOREG(cpu, cpu.AF);
+            Load.POPSTACKINTOREG(cpu, ref cpu.AF);
             return 12;
         }
         public override int TwoSuffix() 
         {
             ushort address = (ushort)(0xFF00 + cpu.BC.low);
-            Load.LOADREGTOADDRESS(cpu, cpu.AF, address, true);
+            Load.LOADREGTOADDRESS(cpu, ref cpu.AF, address, true);
             return 8;
         }
         public override int ThreeSuffix() 
@@ -36,7 +36,7 @@ namespace Gameboy.Opcodes
         }
         public override int FiveSuffix() 
         {
-            Load.PUSHREGONTOSTACK(cpu, cpu.AF);
+            Load.PUSHREGONTOSTACK(cpu, ref cpu.AF);
             return 16;
         }
         public override int SixSuffix() 
@@ -47,7 +47,7 @@ namespace Gameboy.Opcodes
         public override int SevenSuffix() 
         {
             Flow.RESTART(cpu, 0x20);
-            return 32;
+            return 16;
         }
         public override int EightSuffix() 
         {
@@ -69,7 +69,7 @@ namespace Gameboy.Opcodes
         {
             ushort address = (ushort)(cpu.FetchNextInstruction() << 8);
             address += cpu.FetchNextInstruction();
-            Load.LOADBYTEFROMADDRESS(cpu, cpu.AF, address, true);
+            Load.LOADBYTEFROMADDRESS(cpu, ref cpu.AF, address, true);
             return 16;
         }
         public override int BSuffix() 
@@ -92,7 +92,7 @@ namespace Gameboy.Opcodes
         public override int FSuffix() 
         {
             Flow.RESTART(cpu, 0x28);
-            return 32;
+            return 16;
         }
     }
 }

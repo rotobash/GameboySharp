@@ -4,7 +4,7 @@ namespace Gameboy.Utility
 {
     public static class BitOperations
     {
-        public static void SWAP(CPU cpu, Register register, bool highRegister) 
+        public static void SWAP(CPU cpu, ref Register register, bool highRegister) 
         {
             byte regValue = (highRegister) ? register.high : register.low;
             byte upperNibble = (byte)((regValue >> 4) & 0xF);
@@ -42,9 +42,9 @@ namespace Gameboy.Utility
         {
             byte regValue = (highRegister) ? register.high : register.low;
             if (cpu.TestBit(regValue, bitNumber))
-                cpu.SetFlag(Flags.Zero);
-            else 
                 cpu.ResetFlag(Flags.Zero);
+            else 
+                cpu.SetFlag(Flags.Zero);
             
             cpu.SetFlag(Flags.HalfCarry);
             cpu.ResetFlag(Flags.Subtract);
@@ -54,15 +54,15 @@ namespace Gameboy.Utility
         {
             byte value = cpu.FetchByteFromMemory(address);
             if (cpu.TestBit(value, bitNumber))
-                cpu.SetFlag(Flags.Zero);
-            else 
                 cpu.ResetFlag(Flags.Zero);
-            
+            else
+                cpu.SetFlag(Flags.Zero);
+
             cpu.SetFlag(Flags.HalfCarry);
             cpu.ResetFlag(Flags.Subtract);
         }
 
-        public static void SETBIT(CPU cpu, int bitNumber, Register register, bool highRegister) 
+        public static void SETBIT(CPU cpu, int bitNumber, ref Register register, bool highRegister) 
         {
             if (highRegister)
                 register.high = cpu.SetBit(register.high, bitNumber);
@@ -76,7 +76,7 @@ namespace Gameboy.Utility
             cpu.WriteToMemory(address, value);
         }
 
-        public static void RESETBIT(CPU cpu, int bitNumber, Register register, bool highRegister) 
+        public static void RESETBIT(CPU cpu, int bitNumber, ref Register register, bool highRegister) 
         {
             if (highRegister)
                 register.high = cpu.ResetBit(register.high, bitNumber);

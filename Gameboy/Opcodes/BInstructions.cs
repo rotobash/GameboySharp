@@ -11,32 +11,32 @@ namespace Gameboy.Opcodes
 
         public override int ZeroSuffix() 
         {
-            Arithmetic.OR8BIT(cpu, cpu.BC, true);
+            Arithmetic.OR8BIT(cpu, ref cpu.BC, true);
             return 4;
         }
         public override int OneSuffix() 
         {
-            Arithmetic.OR8BIT(cpu, cpu.BC, false);
+            Arithmetic.OR8BIT(cpu, ref cpu.BC, false);
             return 4;
         }
         public override int TwoSuffix() 
         {
-            Arithmetic.OR8BIT(cpu, cpu.DE, true);
+            Arithmetic.OR8BIT(cpu, ref cpu.DE, true);
             return 4;
         }
         public override int ThreeSuffix() 
         {
-            Arithmetic.OR8BIT(cpu, cpu.DE, false);
+            Arithmetic.OR8BIT(cpu, ref cpu.DE, false);
             return 4;
         }
         public override int FourSuffix() 
         {
-            Arithmetic.OR8BIT(cpu, cpu.HL, true);
+            Arithmetic.OR8BIT(cpu, ref cpu.HL, true);
             return 4;
         }
         public override int FiveSuffix() 
         {
-            Arithmetic.OR8BIT(cpu, cpu.HL, false);
+            Arithmetic.OR8BIT(cpu, ref cpu.HL, false);
             return 4;
         }
         public override int SixSuffix() 
@@ -46,37 +46,37 @@ namespace Gameboy.Opcodes
         }
         public override int SevenSuffix() 
         {
-            Arithmetic.OR8BIT(cpu, cpu.AF, true);
+            Arithmetic.OR8BIT(cpu, ref cpu.AF, true);
             return 4;
         }
         public override int EightSuffix() 
         {
-            Arithmetic.CP8BIT(cpu, cpu.BC, true);
+            Arithmetic.CP8BIT(cpu, ref cpu.BC, true);
             return 4;
         }
         public override int NineSuffix() 
         {
-            Arithmetic.CP8BIT(cpu, cpu.BC, false);
+            Arithmetic.CP8BIT(cpu, ref cpu.BC, false);
             return 4;
         }
         public override int ASuffix() 
         {
-            Arithmetic.CP8BIT(cpu, cpu.DE, true);
+            Arithmetic.CP8BIT(cpu, ref cpu.DE, true);
             return 4;
         }
         public override int BSuffix() 
         {
-            Arithmetic.CP8BIT(cpu, cpu.DE, false);
+            Arithmetic.CP8BIT(cpu, ref cpu.DE, false);
             return 4;
         }
         public override int CSuffix() 
         {
-            Arithmetic.CP8BIT(cpu, cpu.HL, true);
+            Arithmetic.CP8BIT(cpu, ref cpu.HL, true);
             return 4;
         }
         public override int DSuffix() 
         {
-            Arithmetic.CP8BIT(cpu, cpu.HL, false);
+            Arithmetic.CP8BIT(cpu, ref cpu.HL, false);
             return 4;
         }
         public override int ESuffix() 
@@ -86,7 +86,7 @@ namespace Gameboy.Opcodes
         }
         public override int FSuffix() 
         {
-            Arithmetic.CP8BIT(cpu, cpu.AF, true);
+            Arithmetic.CP8BIT(cpu, ref cpu.AF, true);
             return 4;
         }
     }

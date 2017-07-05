@@ -17,7 +17,7 @@ namespace Gameboy
         const ushort VERTLINECOMPAREREG = 0xFF45;
         const int SIZEOFTILE = 16;
 
-        internal Color[] buffer;
+        internal Color[,] buffer;
         CPU cpu;
 
         int scanlineCounter;
@@ -27,7 +27,7 @@ namespace Gameboy
             this.cpu = cpu;
             scanlineCounter = SCANLINECYCLES;
             //lcd is 160x144 with 3 RGB values
-            buffer = new Color[160 * 144];
+            buffer = new Color[144,160];
         }
 
         internal void UpdateGraphics(int cycles)
@@ -36,8 +36,6 @@ namespace Gameboy
 
             if (LCDEnabled())
                 scanlineCounter -= cycles;
-            else
-                return;
             
             if (scanlineCounter <= 0)
             {
@@ -47,21 +45,23 @@ namespace Gameboy
 
                 if (currentLine == 144)
                     cpu.RequestInterupt(0);
-                else if (currentLine > 153)
+                if (currentLine > 153)
                     cpu.WriteToMemory(VERTLINEREG, 0);
                 else if (currentLine < 144)
                     DrawScanLine();
-                    return;
             }
         }
 
         void DrawScanLine() 
         {
             byte data = cpu.FetchByteFromMemory(LCDREG);
-            if (cpu.TestBit(data, 0))
-                RenderTiles(data);
-            if (cpu.TestBit(data, 1))
-                RenderSprites(data);
+            if (LCDEnabled())
+            {
+                if (cpu.TestBit(data, 0))
+                    RenderTiles(data);
+                if (cpu.TestBit(data, 1))
+                    RenderSprites(data);
+            }
         }
 
         void RenderTiles(byte lcdStatus)
@@ -83,16 +83,16 @@ namespace Gameboy
             }
 
             if (cpu.TestBit(lcdStatus, 4))
-                tileDataAddress = 0x8000;
-            else
             {
-                tileDataAddress = 0x8800;
+                tileDataAddress = 0x8000;
                 unsigned = true;
             }
+            else
+                tileDataAddress = 0x8800;
 
             byte yCoord;
 
-            if (usingWindow)
+            if (!usingWindow)
             {
                 if (cpu.TestBit(lcdStatus, 3))
                     bgDataAddress = 0x9C00;
@@ -111,7 +111,7 @@ namespace Gameboy
                 yCoord = (byte)(cpu.FetchByteFromMemory(VERTLINEREG) - windowY);
             }
 
-            ushort row = (byte)(((byte)(yCoord / 8)) * 32);
+            ushort row = (ushort)(((byte)(yCoord / 8)) * 32);
 
             for (int pixel = 0; pixel < 160; pixel++)
             {
@@ -125,16 +125,15 @@ namespace Gameboy
 
                 ushort column = (ushort)(xCoord / 8);
                 short tileNum;
-
-                ushort tileAddress = (byte)(bgDataAddress + row + column);
+                
                 if (unsigned)
                 {
-                    tileNum = cpu.FetchByteFromMemory(tileDataAddress);
+                    tileNum = cpu.FetchByteFromMemory((ushort)(bgDataAddress + row + column));
                     tileDataAddress += (byte)(tileNum * 16);
                 }
                 else
                 {
-                    tileNum = (sbyte)(cpu.FetchByteFromMemory(tileAddress));
+                    tileNum = (sbyte)cpu.FetchByteFromMemory((ushort)(bgDataAddress + row + column));
                     tileDataAddress += (byte)((tileNum  + 128) * 16);
                 }
 
@@ -156,7 +155,7 @@ namespace Gameboy
                 if (yBounds < 0 || yBounds > 143 || pixel < 0 || pixel > 159)
                     continue;
 
-                buffer[pixel + (yBounds * 160)] = colour;
+                buffer[yBounds, pixel] = colour;
             }
         }
 
@@ -226,7 +225,12 @@ namespace Gameboy
                         if (colour == Color.White || scanline < 0 || scanline > 143 || pixel < 0 || pixel > 159)
                             continue;
 
-                        buffer[pixel + (scanline * 160)] = colour;
+                        if (cpu.TestBit(attributes, 7))
+                        {
+                            if (buffer[scanline, pixel] != Color.White)
+                                continue;
+                        }
+                        buffer[scanline, pixel] = colour;
                     }
                 }
             }
@@ -303,12 +307,76 @@ namespace Gameboy
             {
                 scanlineCounter = 0;
                 cpu.WriteToMemory(VERTLINEREG, 0);
-                lcdStatus &= 0xFC;
+                lcdStatus &= 252;
                 lcdStatus = cpu.SetBit(lcdStatus, 0);
                 cpu.WriteToMemory(STATREG, lcdStatus);
                 return;
             }
 
+            byte ly = cpu.FetchByteFromMemory(VERTLINEREG);
+
+            byte currentMode = (byte)(lcdStatus & 0x3);
+
+            int mode = 0;
+            bool reqInt = false;
+
+            // set mode as vertical blank
+            if (ly >= 144)
+            {
+                // mode 1
+                mode = 1;
+                lcdStatus = cpu.SetBit(lcdStatus, 0);
+                lcdStatus = cpu.ResetBit(lcdStatus, 1);
+                reqInt = cpu.TestBit(lcdStatus, 4);
+            }
+            else
+            {
+                int mode2Bounds = (376 - 80);
+                int mode3Bounds = (mode2Bounds - 172);
+
+
+                // mode 2
+                if (scanlineCounter >= mode2Bounds)
+                {
+                    mode = 2;
+                    lcdStatus = cpu.SetBit(lcdStatus, 1);
+                    lcdStatus = cpu.ResetBit(lcdStatus, 0);
+                    reqInt = cpu.TestBit(lcdStatus, 5);
+                }
+                // mode 3
+                else if (scanlineCounter >= mode3Bounds)
+                {
+                    mode = 3;
+                    lcdStatus = cpu.SetBit(lcdStatus, 1);
+                    lcdStatus = cpu.SetBit(lcdStatus, 0);
+                }
+                // mode 3
+                else
+                {
+                    mode = 0;
+                    lcdStatus = cpu.ResetBit(lcdStatus, 1);
+                    lcdStatus = cpu.ResetBit(lcdStatus, 0);
+                    reqInt = cpu.TestBit(lcdStatus, 3);
+                }
+
+            }
+
+            // just entered a new mode. Request interupt
+            if (reqInt && (currentMode != mode))
+                cpu.RequestInterupt(1);
+
+            // check for coincidence flag
+            if (ly == cpu.FetchByteFromMemory(VERTLINECOMPAREREG))
+            {
+                lcdStatus = cpu.SetBit(lcdStatus, 2);
+
+                if (cpu.TestBit(lcdStatus, 6))
+                    cpu.RequestInterupt(1);
+            }
+            else
+                lcdStatus = cpu.ResetBit(lcdStatus, 2);
+
+            cpu.WriteToMemory(0xFF41, lcdStatus);
         }
     }
 }

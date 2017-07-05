@@ -3,6 +3,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 
+using System.Diagnostics;
+
 using Gameboy.Opcodes;
 using Gameboy.Utility;
 
@@ -67,7 +69,7 @@ namespace Gameboy
         public Register PC = new Register();
         public Register SP = new Register();
 
-        public Color[] GFXBuffer
+        public Color[,] GFXBuffer
         {
             get 
             {
@@ -75,8 +77,14 @@ namespace Gameboy
             }
         }
 
-        public void ResetCPU() {
-            Flow.JUMP(this, 0);
+        public void ResetCPU()
+        {
+            AF.word = 0x01B0;
+            BC.word = 0x0013;
+            DE.word = 0x00D8;
+            HL.word = 0x014D;
+            SP.word = 0xFFFE;
+            PC.word = 0x100;
         }
 
         internal void SetFlag(Flags flag) 
@@ -108,7 +116,9 @@ namespace Gameboy
                 {
                     byte nextInstruction = FetchNextInstruction();
                     cycles = DecodeAndExecute(nextInstruction);
+
                 }
+
                 cycleCounter += cycles;
                 memory.UpdateTimers(cycles);
                 lcd.UpdateGraphics(cycles);
@@ -217,6 +227,8 @@ namespace Gameboy
         {
             MasterInteruptEnabled = false;
             isHalted = false;
+            isStopped = false;
+
             byte request = FetchByteFromMemory(0xFF0F);
             request = ResetBit(request, code);
             WriteToMemory(0xFF0F, request);
@@ -245,6 +257,12 @@ namespace Gameboy
         internal bool TestBit(byte data, int bitNumber) 
         {
             byte newdata = (byte)((data >> bitNumber) & 0x1);
+            return (newdata == 1);
+        }
+
+        internal static bool TestBit(ushort data, int bitNumber)
+        {
+            ushort newdata = (ushort)((data >> bitNumber) & 0x1);
             return (newdata == 1);
         }
 
@@ -278,13 +296,17 @@ namespace Gameboy
         {
             isHalted = true;
             if (haltLCD)
+            {
+                isStopped = true;
                 lcd.Halt();
+            }
         }
 
         public void Resume()
         {
             isHalted = false;
-            lcd.Resume();
+            if(isStopped)
+                lcd.Resume();
         }
 
         internal void EnableInterupt()

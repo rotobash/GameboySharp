@@ -15,7 +15,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int ZeroSuffix() 
         {
-            Load.LOADBYTEREGTOREG(cpu, cpu.HL, true, cpu.BC, true);
+            Load.LOADBYTEREGTOREG(cpu, ref cpu.HL, true, ref cpu.BC, true);
             return 4;
         }
 
@@ -25,7 +25,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int OneSuffix() 
         {
-            Load.LOADBYTEREGTOREG(cpu, cpu.HL, true, cpu.BC, false);
+            Load.LOADBYTEREGTOREG(cpu, ref cpu.HL, true, ref cpu.BC, false);
             return 4;
         }
 
@@ -35,7 +35,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int TwoSuffix() 
         {
-            Load.LOADBYTEREGTOREG(cpu, cpu.HL, true, cpu.DE, true);
+            Load.LOADBYTEREGTOREG(cpu, ref cpu.HL, true, ref cpu.DE, true);
             return 4;
         }
 
@@ -45,7 +45,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int ThreeSuffix() 
         {
-            Load.LOADBYTEREGTOREG(cpu, cpu.HL, true, cpu.DE, false);
+            Load.LOADBYTEREGTOREG(cpu, ref cpu.HL, true, ref cpu.DE, false);
             return 4;
         }
 
@@ -55,7 +55,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int FourSuffix() 
         {
-            Load.LOADBYTEREGTOREG(cpu, cpu.HL, true, cpu.HL, true);
+            Load.LOADBYTEREGTOREG(cpu, ref cpu.HL, true, ref cpu.HL, true);
             return 4;
         }
 
@@ -65,7 +65,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int FiveSuffix() 
         {
-            Load.LOADBYTEREGTOREG(cpu, cpu.HL, true, cpu.HL, false);
+            Load.LOADBYTEREGTOREG(cpu, ref cpu.HL, true, ref cpu.HL, false);
             return 4;
         }
 
@@ -75,7 +75,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int SixSuffix() 
         {
-            Load.LOADBYTEFROMADDRESS(cpu, cpu.HL, cpu.HL.word, true);
+            Load.LOADBYTEFROMADDRESS(cpu, ref cpu.HL, cpu.HL.word, true);
             return 8;
         }
 
@@ -85,7 +85,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int SevenSuffix() 
         {
-            Load.LOADBYTEREGTOREG(cpu, cpu.HL, true, cpu.AF, true);
+            Load.LOADBYTEREGTOREG(cpu, ref cpu.HL, true, ref cpu.AF, true);
             return 4;
         }
 
@@ -95,7 +95,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int EightSuffix() 
         {
-            Load.LOADBYTEREGTOREG(cpu, cpu.HL, false, cpu.BC, true);
+            Load.LOADBYTEREGTOREG(cpu, ref cpu.HL, false, ref cpu.BC, true);
             return 4;
         }
 
@@ -105,7 +105,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int NineSuffix() 
         {
-            Load.LOADBYTEREGTOREG(cpu, cpu.HL, false, cpu.BC, false);
+            Load.LOADBYTEREGTOREG(cpu, ref cpu.HL, false, ref cpu.BC, false);
             return 4;
         }
 
@@ -115,7 +115,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int ASuffix() 
         {
-            Load.LOADBYTEREGTOREG(cpu, cpu.HL, false, cpu.DE, true);
+            Load.LOADBYTEREGTOREG(cpu, ref cpu.HL, false, ref cpu.DE, true);
             return 4;
         }
 
@@ -125,7 +125,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int BSuffix() 
         {
-            Load.LOADBYTEREGTOREG(cpu, cpu.HL, false, cpu.DE, false);
+            Load.LOADBYTEREGTOREG(cpu, ref cpu.HL, false, ref cpu.DE, false);
             return 4;
         }
 
@@ -135,7 +135,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int CSuffix() 
         {
-            Load.LOADBYTEREGTOREG(cpu, cpu.HL, false, cpu.HL, true);
+            Load.LOADBYTEREGTOREG(cpu, ref cpu.HL, false, ref cpu.HL, true);
             return 4;
         }
 
@@ -145,7 +145,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int DSuffix() 
         {
-            Load.LOADBYTEREGTOREG(cpu, cpu.HL, false, cpu.HL, false);
+            Load.LOADBYTEREGTOREG(cpu, ref cpu.HL, false, ref cpu.HL, false);
             return 4;
         }
 
@@ -155,7 +155,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int ESuffix() 
         {
-            Load.LOADBYTEFROMADDRESS(cpu, cpu.HL, cpu.HL.word, true);
+            Load.LOADBYTEFROMADDRESS(cpu, ref cpu.HL, cpu.HL.word, true);
             return 8;
         }
 
@@ -165,7 +165,7 @@ namespace Gameboy.Opcodes
         /// </summary>
         public override int FSuffix() 
         {
-            Load.LOADBYTEREGTOREG(cpu, cpu.HL, false, cpu.AF, true);
+            Load.LOADBYTEREGTOREG(cpu, ref cpu.HL, false, ref cpu.AF, true);
             return 4;
         }
     }
